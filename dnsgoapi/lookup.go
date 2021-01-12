@@ -3,6 +3,7 @@ package dnsgoapi
 import (
 	"encoding/json"
 	"net/http"
+	re "regexp"
 
 	"github.com/miekg/dns"
 	"github.com/gorilla/mux"
@@ -14,17 +15,17 @@ var (
 
 func GetPublicDNSServer(s string) string {
 	switch s {
-	case "cloudflare":
+	case re.MatchString("(?i)cloudflare"):
 		return "1.1.1.1:53"
-	case "google":
+	case re.MatchString("(?i)google"):
 		return "8.8.8.8:53"
-	case "opendns":
+	case re.MatchString("(?i)opendns"):
 		return "208.67.222.222:53"
-	case "commodo":
+	case re.MatchString("(?i)comodo"):
 		return "8.26.56.26:53"	
-	case "quad9":
+	case re.MatchString("(?i)quad9"):
 		return "9.9.9.9:53"
-	case "verisign":
+	case re.MatchString("(?i)verisign"):
 		return "64.6.64.6:53"
 	default:
 		return "1.1.1.1:53"
