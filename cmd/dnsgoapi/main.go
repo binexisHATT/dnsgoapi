@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
     "flag"
+    "os"
+    "io/ioutil"
 
 	"github.com/gorilla/mux"
 	"github.com/russross/blackfriday"
@@ -17,14 +19,14 @@ func main() {
     flag.Parse()
 
 	r := mux.NewRouter()
-
+    f, err := os.Open("./README.md")
+    if err != nil {
+        log.Fatal("Unable to open README.md file")
+    }
+    defer f.Close()
+    markdown, err := ioutil.ReadAll(f)
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        input := []byte(`
-	 # dnsgoapi
-	 ### An API for making simple DNS queries with various free public DNS server support
-	 `,
-	)
-        fmt.Fprintf(w, string(blackfriday.MarkdownCommon(input)))
+        fmt.Fprintf(w, string(blackfriday.MarkdownCommon(markdown)))
 	}).Methods("GET")
 
 	r.HandleFunc("/a/{PublicDNS}/{q}", dnsgoapi.QueryA).Methods("GET")

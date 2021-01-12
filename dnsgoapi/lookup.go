@@ -5,8 +5,8 @@ import (
 	"net/http"
 	re "regexp"
 
-	"github.com/miekg/dns"
 	"github.com/gorilla/mux"
+	"github.com/miekg/dns"
 )
 
 var (
@@ -14,13 +14,13 @@ var (
 )
 
 func matchString(expression, serverName string) bool {
-    matched, _ := re.MatchString(expression, serverName)
-    return matched
+	matched, _ := re.MatchString(expression, serverName)
+	return matched
 }
 
 func getPublicDNSServer(s string) string {
 	switch {
-    case matchString("(?i)cloudflare", s):
+	case matchString("(?i)cloudflare", s):
 		return "1.1.1.1:53"
 	case matchString("(?i)google", s):
 		return "8.8.8.8:53"
@@ -42,7 +42,6 @@ func QueryA(w http.ResponseWriter, r *http.Request) {
 
 	q := mux.Vars(r)["q"]
 	publicDNS := mux.Vars(r)["PublicDNS"]
-
 	publicDNS = getPublicDNSServer(publicDNS)
 
 	fqdn := dns.Fqdn(q)
@@ -84,7 +83,6 @@ func QueryCNAME(w http.ResponseWriter, r *http.Request) {
 	//publicDNS := mux.Vars(r)["DNSServer"]
 	fqdn := dns.Fqdn(q)
 	msg.SetQuestion(fqdn, dns.TypeCNAME)
-
 
 	w.Header().Set("Content-Type", "application/json")
 }
