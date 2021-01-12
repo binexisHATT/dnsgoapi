@@ -22,7 +22,7 @@ func main() {
         input := []byte(`
 	 # dnsgoapi
 	 ### An API for making simple DNS queries with various free public DNS server support
-	 `
+	 `,
 	)
         fmt.Fprintf(w, string(blackfriday.MarkdownCommon(input)))
 	}).Methods("GET")
