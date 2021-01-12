@@ -44,7 +44,7 @@ func QueryA(w http.ResponseWriter, r *http.Request) {
 	msg.SetQuestion(fqdn, dns.TypeA)
 	resp, err := dns.Exchange(&msg, publicDNS)
 	if err != nil {
-		panic(err)
+		http.Redirect(w, r "/", 302)
 	}
 
 	if len(resp.Answer) < 1 {
