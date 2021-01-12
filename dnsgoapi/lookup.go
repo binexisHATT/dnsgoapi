@@ -13,7 +13,7 @@ var (
 	msg dns.Msg
 )
 
-func GetPublicDNSServer(s string) string {
+func getPublicDNSServer(s string) string {
 	switch s {
 	case re.MatchString("(?i)cloudflare"):
 		return "1.1.1.1:53"
@@ -38,7 +38,7 @@ func QueryA(w http.ResponseWriter, r *http.Request) {
 	q := mux.Vars(r)["q"]
 	publicDNS := mux.Vars(r)["DNSServer"]
 
-	publicDNS = GetPublicDNSServer(publicDNS)
+	publicDNS = getPublicDNSServer(publicDNS)
 
 	fqdn := dns.Fqdn(q)
 	msg.SetQuestion(fqdn, dns.TypeA)
