@@ -19,8 +19,11 @@ func main() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// render markdown template here using ```blackfriday```
-        input := []byte("# dnsgoapi")
+        input := []byte(`
+	 # dnsgoapi
+	 ### An API for making simple DNS queries with various free public DNS server support
+	 `
+	)
         fmt.Fprintf(w, string(blackfriday.MarkdownCommon(input)))
 	}).Methods("GET")
 
