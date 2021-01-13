@@ -1,4 +1,4 @@
-module dnsgoapi
+module github.com/binexisHATT/dnsgoapi
 
 go 1.15
 
