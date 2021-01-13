@@ -29,7 +29,7 @@ func main() {
 		fmt.Fprintf(w, string(blackfriday.MarkdownCommon(markdown)))
 	}).Methods("GET")
 
-	r.HandleFunc("/{recordType}/{publicDNS}/{fqdn}", dnsapi.DNSQuery).Methods("GET")
+	r.HandleFunc("/{recordType}/{publicDNS}/{fqdn}", dnsgoapi.DNSQuery).Methods("GET")
 
 	l := fmt.Sprintf(":%d", *port)
 	log.Printf("Listening on %s", l)
