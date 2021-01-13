@@ -24,14 +24,13 @@ func main() {
 		log.Fatal("Unable to open README.md file")
 	}
 	defer f.Close()
+
 	markdown, err := ioutil.ReadAll(f)
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(blackfriday.MarkdownCommon(markdown)))
 	}).Methods("GET")
 
-	r.HandleFunc("/a/{PublicDNS}/{q}", dnsgoapi.QueryA).Methods("GET")
-	r.HandleFunc("/aaaa/{PublicDNS}/{q}", dnsgoapi.QueryQuadA).Methods("GET")
-	r.HandleFunc("/cname/{PublicDNS}/{q}", dnsgoapi.QueryCNAME).Methods("GET")
+	r.HandleFunc("/{recordType}/{publicDNS}/{fqdn}", dnsgoapi.DNSQuery).Methods("GET")
 
 	l := fmt.Sprintf(":%d", *port)
 	log.Printf("Listening on %s", l)
