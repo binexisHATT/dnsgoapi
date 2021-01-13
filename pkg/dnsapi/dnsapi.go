@@ -68,9 +68,6 @@ func setRecordType(fqdn, requestedRecord string, msg *dns.Msg) {
 	case matchString("(?i)ptr", requestedRecord):
 		log.Println("(Match) PTR Record")
 		msg.SetQuestion(fqdn, dns.TypePTR)
-	case matchString("(?i)cert", requestedRecord):
-		log.Println("(Match) CERT Record")
-		msg.SetQuestion(fqdn, dns.TypeCERT)
 	case matchString("(?i)caa", requestedRecord):
 		log.Println("(Match) CAA Record")
 		msg.SetQuestion(fqdn, dns.TypeCAA)
@@ -132,9 +129,6 @@ func DNSQuery(w http.ResponseWriter, r *http.Request) {
 			case *dns.PTR:
 				log.Printf("(Response) PTR Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.PTR).String())
-			case *dns.CERT:
-				log.Printf("(Response) CERT Record Answer for %s", fqdn)
-				result[fqdn] = append(result[fqdn], ans.(*dns.CERT).String())
 			case *dns.CAA:
 				log.Printf("(Response) CAA Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.CAA).String())
