@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/dnsgoapi/pkg/dnsapi"
 	"github.com/gorilla/mux"
 	"github.com/russross/blackfriday"
-	"github.com/dnsgoapi/pkg/dnsapi"
 )
 
 func main() {

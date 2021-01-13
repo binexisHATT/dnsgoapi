@@ -1,12 +1,12 @@
 package dnsgoapi
 
 import (
-	"log"
-    "strings"
-    "strconv"
 	"encoding/json"
+	"log"
 	"net/http"
 	re "regexp"
+	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/miekg/dns"
@@ -22,7 +22,7 @@ func matchString(expression, serverName string) bool {
 }
 
 func replaceTabs(str, replace_with string) string {
-    return strings.Replace(str, "\t", replace_with, -1)
+	return strings.Replace(str, "\t", replace_with, -1)
 }
 
 func getDNSIP(s string) string {
@@ -109,42 +109,42 @@ func DNSQuery(w http.ResponseWriter, r *http.Request) {
 		for _, ans := range resp.Answer {
 			switch ans.(type) {
 			case *dns.A:
-                log.Printf("(Response) A Record Answer for %s", fqdn)
+				log.Printf("(Response) A Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.A).A.String())
 			case *dns.AAAA:
-                log.Printf("(Response) AAAA Record Answer for %s", fqdn)
+				log.Printf("(Response) AAAA Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.AAAA).AAAA.String())
 			case *dns.CNAME:
-                log.Printf("(Response) CNAME Record Answer for %s", fqdn)
+				log.Printf("(Response) CNAME Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.CNAME).Target)
 			case *dns.MX:
-                log.Printf("(Response) MX Record Answer for %s", fqdn)
+				log.Printf("(Response) MX Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.MX).Mx)
 			case *dns.NS:
-                log.Printf("(Response) NS Record Answer for %s", fqdn)
+				log.Printf("(Response) NS Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.NS).Ns)
 			case *dns.TXT:
-                log.Printf("(Response) TXT Record Answer for %s", fqdn)
+				log.Printf("(Response) TXT Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.TXT).String())
 			case *dns.PTR:
-                log.Printf("(Response) PTR Record Answer for %s", fqdn)
+				log.Printf("(Response) PTR Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.PTR).String())
 			case *dns.CERT:
-                log.Printf("(Response) CERT Record Answer for %s", fqdn)
+				log.Printf("(Response) CERT Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.CERT).String())
 			case *dns.SRV:
-                log.Printf("(Response) SRV Record Answer for %s", fqdn)
+				log.Printf("(Response) SRV Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.SRV).String())
 			case *dns.SOA:
-                log.Printf("(Response) SOA Record Answer for %s", fqdn)
-                // Extracting only the primary name server, email, and TTL
-                var temp []string
-                a := ans.(*dns.SOA)
-                temp = append(temp, a.Ns)
-                temp = append(temp, a.Mbox)
-                temp = append(temp, strconv.FormatInt(int64(a.Minttl), 10))
-                soa := strings.Join(temp, ",")
-                result[fqdn] = append(result[fqdn], soa)
+				log.Printf("(Response) SOA Record Answer for %s", fqdn)
+				// Extracting only the primary name server, email, and TTL
+				var temp []string
+				a := ans.(*dns.SOA)
+				temp = append(temp, a.Ns)
+				temp = append(temp, a.Mbox)
+				temp = append(temp, strconv.FormatInt(int64(a.Minttl), 10))
+				soa := strings.Join(temp, ",")
+				result[fqdn] = append(result[fqdn], soa)
 			default:
 				result[fqdn] = append(result[fqdn], "No answers")
 			}
