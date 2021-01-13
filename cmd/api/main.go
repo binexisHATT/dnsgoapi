@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/russross/blackfriday"
-	"github.com/binexisHATT/dnsgoapi/pkg/dnsapi"
+	"github.com/dnsgoapi/pkg/dnsapi"
 )
 
 func main() {
