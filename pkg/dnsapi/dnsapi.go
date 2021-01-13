@@ -1,8 +1,10 @@
 package dnsgoapi
 
 import (
-	"encoding/json"
 	"log"
+    "strings"
+    "strconv"
+	"encoding/json"
 	"net/http"
 	re "regexp"
 
@@ -17,6 +19,10 @@ var (
 func matchString(expression, serverName string) bool {
 	matched, _ := re.MatchString(expression, serverName)
 	return matched
+}
+
+func replaceTabs(str, replace_with string) string {
+    return strings.Replace(str, "\t", replace_with, -1)
 }
 
 func getDNSIP(s string) string {
@@ -42,23 +48,35 @@ func setRecordType(fqdn, requestedRecord string, msg *dns.Msg) {
 	fqdn = dns.Fqdn(fqdn)
 	switch {
 	case matchString("(?i)^a$", requestedRecord):
-		log.Println("(match) A")
+		log.Println("(Match) A Record")
 		msg.SetQuestion(fqdn, dns.TypeA)
 	case matchString("(?i)aaaa", requestedRecord):
-		log.Println("(match) AAAA")
+		log.Println("(Match) AAAA Record")
 		msg.SetQuestion(fqdn, dns.TypeAAAA)
 	case matchString("(?i)cname", requestedRecord):
-		log.Println("(match) CNAME")
+		log.Println("(Match) CNAME Record")
 		msg.SetQuestion(fqdn, dns.TypeCNAME)
 	case matchString("(?i)mx", requestedRecord):
-		log.Println("(match) MX")
+		log.Println("(Match) MX Record")
 		msg.SetQuestion(fqdn, dns.TypeMX)
 	case matchString("(?i)ns", requestedRecord):
-		log.Println("(match) NS")
+		log.Println("(Match) NS Record")
 		msg.SetQuestion(fqdn, dns.TypeNS)
 	case matchString("(?i)txt", requestedRecord):
-		log.Println("(match) TXT")
+		log.Println("(Match) TXT Record")
 		msg.SetQuestion(fqdn, dns.TypeTXT)
+	case matchString("(?i)ptr", requestedRecord):
+		log.Println("(Match) PTR Record")
+		msg.SetQuestion(fqdn, dns.TypePTR)
+	case matchString("(?i)cert", requestedRecord):
+		log.Println("(Match) CERT Record")
+		msg.SetQuestion(fqdn, dns.TypeCERT)
+	case matchString("(?i)srv", requestedRecord):
+		log.Println("(Match) SRV Record")
+		msg.SetQuestion(fqdn, dns.TypeSRV)
+	case matchString("(?i)soa", requestedRecord):
+		log.Println("(Match) SOA Record")
+		msg.SetQuestion(fqdn, dns.TypeSOA)
 	default:
 		msg.SetQuestion(fqdn, dns.TypeA)
 	}
@@ -91,17 +109,42 @@ func DNSQuery(w http.ResponseWriter, r *http.Request) {
 		for _, ans := range resp.Answer {
 			switch ans.(type) {
 			case *dns.A:
+                log.Printf("(Response) A Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.A).A.String())
 			case *dns.AAAA:
+                log.Printf("(Response) AAAA Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.AAAA).AAAA.String())
 			case *dns.CNAME:
+                log.Printf("(Response) CNAME Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.CNAME).Target)
 			case *dns.MX:
+                log.Printf("(Response) MX Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.MX).Mx)
 			case *dns.NS:
+                log.Printf("(Response) NS Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.NS).Ns)
 			case *dns.TXT:
+                log.Printf("(Response) TXT Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.TXT).String())
+			case *dns.PTR:
+                log.Printf("(Response) PTR Record Answer for %s", fqdn)
+				result[fqdn] = append(result[fqdn], ans.(*dns.PTR).String())
+			case *dns.CERT:
+                log.Printf("(Response) CERT Record Answer for %s", fqdn)
+				result[fqdn] = append(result[fqdn], ans.(*dns.CERT).String())
+			case *dns.SRV:
+                log.Printf("(Response) SRV Record Answer for %s", fqdn)
+				result[fqdn] = append(result[fqdn], ans.(*dns.SRV).String())
+			case *dns.SOA:
+                log.Printf("(Response) SOA Record Answer for %s", fqdn)
+                // Extracting only the primary name server, email, and TTL
+                var temp []string
+                a := ans.(*dns.SOA)
+                temp = append(temp, a.Ns)
+                temp = append(temp, a.Mbox)
+                temp = append(temp, strconv.FormatInt(int64(a.Minttl), 10))
+                soa := strings.Join(temp, ",")
+                result[fqdn] = append(result[fqdn], soa)
 			default:
 				result[fqdn] = append(result[fqdn], "No answers")
 			}

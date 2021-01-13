@@ -1,4 +1,4 @@
 all:
-	go build -o dnsapi cmd/dnsgoapi/main.go
+	go build -o dnsapi cmd/api/main.go
 clean:
 	rm dnsapi
