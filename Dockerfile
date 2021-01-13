@@ -1,13 +1,15 @@
 FROM golang:latest
 
-WORKDIR /go/src/dnsgoapi
+WORKDIR /dnsgoapi
+
+COPY ./go.mod ./go.sum ./
+RUN go mod download
+
 COPY . .
 
-RUN go get -u github.com/miekg/dns
-RUN go get -u github.com/gorilla/mux
-RUN go get -u github.com/russross/blackfriday
+RUN go build -o dnsgoapi cmd/api/main.go
 
-RUN go install cmd/dnsgoapi 
+EXPOSE 8080
 
-CMD ["dnsgoapi"]
+CMD ["dnsgoapi", "-port", "8080"]
 
