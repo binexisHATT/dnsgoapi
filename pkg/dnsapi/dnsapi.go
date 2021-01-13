@@ -71,6 +71,9 @@ func setRecordType(fqdn, requestedRecord string, msg *dns.Msg) {
 	case matchString("(?i)cert", requestedRecord):
 		log.Println("(Match) CERT Record")
 		msg.SetQuestion(fqdn, dns.TypeCERT)
+	case matchString("(?i)caa", requestedRecord):
+		log.Println("(Match) CAA Record")
+		msg.SetQuestion(fqdn, dns.TypeCAA)
 	case matchString("(?i)srv", requestedRecord):
 		log.Println("(Match) SRV Record")
 		msg.SetQuestion(fqdn, dns.TypeSRV)
@@ -132,6 +135,9 @@ func DNSQuery(w http.ResponseWriter, r *http.Request) {
 			case *dns.CERT:
 				log.Printf("(Response) CERT Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.CERT).String())
+			case *dns.CAA:
+				log.Printf("(Response) CAA Record Answer for %s", fqdn)
+				result[fqdn] = append(result[fqdn], ans.(*dns.CAA).String())
 			case *dns.SRV:
 				log.Printf("(Response) SRV Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.SRV).String())
