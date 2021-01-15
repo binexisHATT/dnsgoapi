@@ -4,16 +4,16 @@ An API written in Go for performing DNS queries
 
 ### Setup
 
-1. Run with Docker:
+1. Clone the repo:
+    ```
+    git clone https://github.com/binexisHATT/dnsgoapi.git
+    ```
+2. Run with Docker:
     ```
     docker build . -t dnsgoapi
     docker --rm -it -p 8080:8080 dnsgoapi
     ```
-    OR build the binary and run it:
-    ```
-    make all && ./dnsgoapi
-    ```
-2. Optional: In another terminal window, run `sudo apt install jq` to install `jq` for parsing JSON responses 
+3. Optional: In another terminal window, run `sudo apt install jq` to install `jq` for parsing JSON responses 
 
 ### Public DNS Servers
 
