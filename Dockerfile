@@ -11,5 +11,5 @@ RUN go build -o dnsgoapi cmd/api/main.go
 
 EXPOSE 8080
 
-CMD ["dnsgoapi", "-port", "8080"]
+CMD ["./dnsgoapi", "-port", "8080"]
 
