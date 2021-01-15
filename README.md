@@ -24,8 +24,7 @@ An API written in Go for performing DNS queries
 ```
 /record_type/dns_server/fully_qualified_domain_name
 ```
-**Note**
-Both `record_type` and `dns_server` are case insensitive, thus `/aaaa` is equivalent to `/AAAA`
+**Note**: both `record_type` and `dns_server` are case insensitive, thus `/aaaa` is equivalent to `/AAAA`
 
 ### Requesting A Records
 
