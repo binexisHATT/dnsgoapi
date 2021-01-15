@@ -22,7 +22,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	markdown, err := ioutil.ReadAll(f)
 
-    fmt.Fprintf(w, string(blackfriday.MarkdownCommon(markdown)))
+	fmt.Fprintf(w, string(blackfriday.MarkdownCommon(markdown)))
 }
 
 func main() {
@@ -31,14 +31,14 @@ func main() {
 
 	r := mux.NewRouter()
 
-    r.HandleFunc("/", index)
+	r.HandleFunc("/", index)
 
-    r.HandleFunc(
-        "/{recordType:[a-zA-Z]+}/{publicDNS:[a-zA-Z9]+}/{fqdn}",
-        dnsgoapi.DNSQuery,
-    ).Methods("GET")
+	r.HandleFunc(
+		"/{recordType:[a-zA-Z]+}/{publicDNS:[a-zA-Z9]+}/{fqdn}",
+		dnsgoapi.DNSQuery,
+	).Methods("GET")
 
-    http.Handle("/", r)
+	http.Handle("/", r)
 
 	l := fmt.Sprintf(":%d", *port)
 	log.Printf("Listening on %s", l)

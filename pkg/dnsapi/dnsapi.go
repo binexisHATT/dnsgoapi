@@ -1,8 +1,8 @@
 package dnsgoapi
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 	"net/http"
 	re "regexp"
 	"strings"
@@ -126,7 +126,7 @@ func DNSQuery(w http.ResponseWriter, r *http.Request) {
 				result[fqdn] = append(result[fqdn], ans.(*dns.NS).Ns)
 			case *dns.TXT:
 				log.Printf("(Response) TXT Record Answer for %s", fqdn)
-                txt := ans.(*dns.TXT).Txt[0]
+				txt := ans.(*dns.TXT).Txt[0]
 				result[fqdn] = append(result[fqdn], txt)
 			case *dns.PTR:
 				log.Printf("(Response) PTR Record Answer for %s", fqdn)
