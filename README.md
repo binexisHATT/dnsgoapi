@@ -26,6 +26,31 @@ An API written in Go for performing DNS queries
 ```
 **Note**: both `record_type` and `dns_server` are case insensitive, thus `/aaaa` is equivalent to `/AAAA`
 
+### Python Example
+
+```python
+from requests import get
+
+url = "http://localhost:8080/"
+
+def query_api(record_type, dns_server, fqdn):
+    resp = get(f"{url}/{record_type}/{dns_server}/{fqdn}")
+    if resp.status_code != 404:
+        json = resp.json()
+        for val in json[fqdn]:
+            print(val)
+
+if __name__ == "__main__":
+    # Requesting A records
+    query_api("a", "cloudflare", "google.com")
+    # Requesting AAAA records
+    query_api("aaaa", "cloudflare", "google.com")
+    # Requesting MX records
+    query_api("mx", "cloudflare", "google.com")
+    # Requesting NS records
+    query_api("ns", "cloudflare", "google.com")
+```
+
 ### Requesting A Records
 
 ```
