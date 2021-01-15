@@ -62,12 +62,6 @@ curl --no-progress-meter http://localhost:8080/ns/google/google.com | jq
 curl --no-progress-meter http://localhost:8080/txt/verisign/google.com | jq
 ```
 
-### Requesting PTR Records
-
-```
-curl --no-progress-meter http://localhost:8080/ptr/google/google.com | jq
-```
-
 ### Requesting caa Records
 
 ```
