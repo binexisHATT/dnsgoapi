@@ -1,6 +1,6 @@
 # DNSGoAPI
 
-An API written in Go for performing DNS queries
+An API written in Go for performing basic DNS queries
 
 ### Setup
 
