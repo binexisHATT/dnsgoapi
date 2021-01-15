@@ -11,7 +11,7 @@ An API written in Go for performing DNS queries
     ```
     OR build the binary and run it:
     ```
-    make all && ./dnsapi
+    make all && ./dnsgoapi
     ```
 2. Optional: In another terminal window, run `sudo apt install jq` to install `jq` for parsing JSON responses 
 
