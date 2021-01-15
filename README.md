@@ -51,11 +51,11 @@ if __name__ == "__main__":
     # Requesting A records
     query_api("a", "cloudflare", "google.com")
     # Requesting AAAA records
-    query_api("aaaa", "cloudflare", "google.com")
+    query_api("aaaa", "quad9", "google.com")
     # Requesting MX records
-    query_api("mx", "cloudflare", "google.com")
+    query_api("mx", "comodo", "google.com")
     # Requesting NS records
-    query_api("ns", "cloudflare", "google.com")
+    query_api("ns", "google", "google.com")
 ```
 
 ### Requesting A Records
