@@ -24,6 +24,8 @@ An API written in Go for performing DNS queries
 ```
 /record_type/dns_server/fully_qualified_domain_name
 ```
+**Note**
+Both `record_type` and `dns_server` are case insensitive, thus `/aaaa` is equivalent to `/AAAA`
 
 ### Requesting A Records
 
@@ -52,5 +54,29 @@ curl --no-progress-meter http://localhost:8080/mx/quad9/google.com | jq
 ### Requesting NS Records
 
 ```
-curl --no-progress-meter http://localhost:8080/ns/comodo/google.com | jq
+curl --no-progress-meter http://localhost:8080/ns/google/google.com | jq
+```
+
+### Requesting TXT Records
+
+```
+curl --no-progress-meter http://localhost:8080/txt/verisign/google.com | jq
+```
+
+### Requesting PTR Records
+
+```
+curl --no-progress-meter http://localhost:8080/ptr/google/google.com | jq
+```
+
+### Requesting caa Records
+
+```
+curl --no-progress-meter http://localhost:8080/caa/cloudflare/google.com | jq
+```
+
+### Requesting SOA Records
+
+```
+curl --no-progress-meter http://localhost:8080/soa/quad9/google.com | jq
 ```
