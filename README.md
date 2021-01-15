@@ -90,7 +90,7 @@ curl --no-progress-meter http://localhost:8080/ns/google/google.com | jq
 curl --no-progress-meter http://localhost:8080/txt/verisign/google.com | jq
 ```
 
-### Requesting caa Records
+### Requesting CAA Records
 
 ```
 curl --no-progress-meter http://localhost:8080/caa/cloudflare/google.com | jq
