@@ -13,11 +13,7 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-func main() {
-	port := flag.Int("port", 8080, "The port for the server to listen on")
-	flag.Parse()
-
-	r := mux.NewRouter()
+func index(w http.ResponseWriter, r *http.Request) {
 	f, err := os.Open("./README.md")
 	if err != nil {
 		log.Fatal("Unable to open README.md file")
@@ -25,13 +21,27 @@ func main() {
 	defer f.Close()
 
 	markdown, err := ioutil.ReadAll(f)
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, string(blackfriday.MarkdownCommon(markdown)))
-	}).Methods("GET")
 
-	r.HandleFunc("/{recordType}/{publicDNS}/{fqdn}", dnsgoapi.DNSQuery).Methods("GET")
+    fmt.Fprintf(w, string(blackfriday.MarkdownCommon(markdown)))
+}
+
+func main() {
+	port := flag.Int("port", 8080, "The port for the server to listen on")
+	flag.Parse()
+
+	r := mux.NewRouter()
+
+    r.HandleFunc("/", index)
+
+    r.HandleFunc(
+        "/{recordType:[a-zA-Z]+}/{publicDNS:[a-zA-Z9]+}/{fqdn}",
+        dnsgoapi.DNSQuery,
+    ).Methods("GET")
+
+    http.Handle("/", r)
 
 	l := fmt.Sprintf(":%d", *port)
 	log.Printf("Listening on %s", l)
+
 	log.Fatal(http.ListenAndServe(l, r))
 }

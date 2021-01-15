@@ -1,11 +1,10 @@
 package dnsgoapi
 
 import (
-	"encoding/json"
 	"log"
+	"encoding/json"
 	"net/http"
 	re "regexp"
-	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -17,15 +16,18 @@ var (
 )
 
 func matchString(expression, serverName string) bool {
+
 	matched, _ := re.MatchString(expression, serverName)
 	return matched
 }
 
 func replaceTabs(str, replace_with string) string {
+
 	return strings.Replace(str, "\t", replace_with, -1)
 }
 
 func getDNSIP(s string) string {
+
 	switch {
 	case matchString("(?i)cloudflare", s):
 		return "1.1.1.1:53"
@@ -45,6 +47,7 @@ func getDNSIP(s string) string {
 }
 
 func setRecordType(fqdn, requestedRecord string, msg *dns.Msg) {
+
 	fqdn = dns.Fqdn(fqdn)
 	switch {
 	case matchString("(?i)^a$", requestedRecord):
@@ -71,9 +74,6 @@ func setRecordType(fqdn, requestedRecord string, msg *dns.Msg) {
 	case matchString("(?i)caa", requestedRecord):
 		log.Println("(Match) CAA Record")
 		msg.SetQuestion(fqdn, dns.TypeCAA)
-	case matchString("(?i)srv", requestedRecord):
-		log.Println("(Match) SRV Record")
-		msg.SetQuestion(fqdn, dns.TypeSRV)
 	case matchString("(?i)soa", requestedRecord):
 		log.Println("(Match) SOA Record")
 		msg.SetQuestion(fqdn, dns.TypeSOA)
@@ -83,6 +83,7 @@ func setRecordType(fqdn, requestedRecord string, msg *dns.Msg) {
 }
 
 func DNSQuery(w http.ResponseWriter, r *http.Request) {
+
 	result := make(map[string][]string)
 
 	requestedRecord := mux.Vars(r)["recordType"]
@@ -125,24 +126,21 @@ func DNSQuery(w http.ResponseWriter, r *http.Request) {
 				result[fqdn] = append(result[fqdn], ans.(*dns.NS).Ns)
 			case *dns.TXT:
 				log.Printf("(Response) TXT Record Answer for %s", fqdn)
-				result[fqdn] = append(result[fqdn], ans.(*dns.TXT).String())
+                txt := ans.(*dns.TXT).Txt[0]
+				result[fqdn] = append(result[fqdn], txt)
 			case *dns.PTR:
 				log.Printf("(Response) PTR Record Answer for %s", fqdn)
 				result[fqdn] = append(result[fqdn], ans.(*dns.PTR).String())
 			case *dns.CAA:
 				log.Printf("(Response) CAA Record Answer for %s", fqdn)
-				result[fqdn] = append(result[fqdn], ans.(*dns.CAA).String())
-			case *dns.SRV:
-				log.Printf("(Response) SRV Record Answer for %s", fqdn)
-				result[fqdn] = append(result[fqdn], ans.(*dns.SRV).String())
+				result[fqdn] = append(result[fqdn], ans.(*dns.CAA).Value)
 			case *dns.SOA:
 				log.Printf("(Response) SOA Record Answer for %s", fqdn)
-				// Extracting only the primary name server, email, and TTL
+				// Extracting only the primary name server and primary email
 				var temp []string
 				a := ans.(*dns.SOA)
 				temp = append(temp, a.Ns)
 				temp = append(temp, a.Mbox)
-				temp = append(temp, strconv.FormatInt(int64(a.Minttl), 10))
 				soa := strings.Join(temp, ",")
 				result[fqdn] = append(result[fqdn], soa)
 			default:
