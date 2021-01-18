@@ -6,7 +6,8 @@ An API written in Go for performing basic DNS queries
 
 1. Clone the repo:
     ```
-    git clone https://github.com/binexisHATT/dnsgoapi.git && cd dnsgoapi
+    git clone https://github.com/binexisHATT/dnsgoapi.git
+    cd dnsgoapi
     ```
 2. Run with Docker:
     ```
