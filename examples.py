@@ -11,6 +11,6 @@ def query_api(record_type, dns_server, fqdn):
 
 if __name__ == "__main__":
     query_api("a", "cloudflare", "google.com")
-    query_api("aaaa", "cloudflare", "google.com")
-    query_api("mx", "cloudflare", "google.com")
-    query_api("ns", "cloudflare", "google.com")
+    query_api("aaaa", "quad9", "google.com")
+    query_api("mx", "comodo", "google.com")
+    query_api("ns", "google", "google.com")
